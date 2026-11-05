@@ -13,7 +13,7 @@ jobs:
     env:
       APP_ENV: prod
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Envoi FTP (FTPS) et vidage du cache
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_HOST: ftp.cluster100.hosting.ovh.net
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |

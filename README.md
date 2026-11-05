@@ -75,10 +75,11 @@ Dépôt → *Settings → Secrets and variables → Actions* → ajouter :
 
 | Secret | Valeur |
 |---|---|
-| `FTP_HOST` | `ftp.clusterXXX.hosting.ovh.net` (manager → *FTP-SSH*) |
 | `FTP_USER` / `FTP_PASSWORD` | identifiants FTP OVH |
 | `DEPLOY_TOKEN` | la même valeur que dans `.env.local` |
 | `SITE_URL` | `https://tournelion.com` |
+
+Le serveur FTP (`ftp.cluster100.hosting.ovh.net`) est écrit directement dans le workflow.
 
 Chaque push sur `main` lance `.github/workflows/deploy.yml` : `composer install`, compilation des assets,
 envoi FTP, vidage du cache, puis appel de `/_deploy/migrate` qui joue les migrations (pas de SSH sur l'offre Perso).
