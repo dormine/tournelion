@@ -1,0 +1,12 @@
+<table cellpadding="6" style="border-collapse: collapse">
+    {% for item in order.items %}
+        <tr>
+            <td>{{ item.quantity }} × {{ item.productName }}</td>
+            <td style="text-align: right">{{ item.totalCents|price }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <th style="text-align: left">Total</th>
+        <th style="text-align: right">{{ order.totalCents|price }}</th>
+    </tr>
+</table>

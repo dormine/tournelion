@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block body %}
+    <article class="product">
+        {% if product.image %}
+            <img src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.name }}">
+        {% endif %}
+        <div>
+            <h1>{{ product.name }}</h1>
+            <p class="price">{{ product.priceCents|price }}</p>
+            {# La description est saisie par l'admin dans un éditeur riche #}
+            <div class="description">{{ product.description|raw }}</div>
+
+            {% if product.available %}
+                <form method="post" action="{{ path('cart_add', {id: product.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
+                    <label>Quantité
+                        <input type="number" name="quantity" value="1" min="1" {% if product.stock is not null %}max="{{ product.stock }}"{% endif %}>
+                    </label>
+                    <button class="button" type="submit">Ajouter au panier</button>
+                </form>
+            {% else %}
+                <p class="sold-out">Épuisé</p>
+            {% endif %}
+        </div>
+    </article>
+{% endblock %}

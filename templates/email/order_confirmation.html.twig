@@ -1,0 +1,5 @@
+<p>Bonjour{% if order.customerName %} {{ order.customerName }}{% endif %},</p>
+<p>Merci pour votre commande <strong>{{ order.reference }}</strong>, votre paiement a bien été reçu.</p>
+{{ include('email/_items.html.twig') }}
+<p>Vous recevrez un nouvel e-mail lors de l'expédition.</p>
+<p>Tournelion</p>

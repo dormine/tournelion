@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Tournelion{% endblock %} · Tournelion</title>
+        <meta name="description" content="{% block description %}Tournelion, artiste-autrice.{% endblock %}">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌼</text></svg>">
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        <header class="site-header">
+            <a href="{{ path('home') }}" class="logo">Tournelion</a>
+            <nav>
+                <a href="{{ path('home') }}">Accueil</a>
+                <a href="{{ path('shop_index') }}">Boutique</a>
+                <a href="{{ path('cart_show') }}">Panier{% if cart_count() > 0 %} ({{ cart_count() }}){% endif %}</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <p class="flash flash-{{ type }}">{{ message }}</p>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </main>
+
+        <footer class="site-footer">
+            <p>© {{ 'now'|date('Y') }} Tournelion</p>
+        </footer>
+    </body>
+</html>

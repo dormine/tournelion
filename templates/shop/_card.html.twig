@@ -1,0 +1,10 @@
+<a class="product-card" href="{{ path('shop_product', {slug: product.slug}) }}">
+    {% if product.image %}
+        <img src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.name }}" loading="lazy">
+    {% else %}
+        <div class="placeholder"></div>
+    {% endif %}
+    <h3>{{ product.name }}</h3>
+    <p class="price">{{ product.priceCents|price }}</p>
+    {% if not product.available %}<p class="sold-out">Épuisé</p>{% endif %}
+</a>

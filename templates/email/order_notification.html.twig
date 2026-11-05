@@ -1,0 +1,13 @@
+<p>Nouvelle commande payée : <strong>{{ order.reference }}</strong></p>
+<p>Client : {{ order.customerName }} &lt;{{ order.email }}&gt;</p>
+{% set address = order.shippingAddress %}
+{% if address %}
+    <p>
+        {{ address.line1 ?? '' }}<br>
+        {% if address.line2 ?? false %}{{ address.line2 }}<br>{% endif %}
+        {{ address.postal_code ?? '' }} {{ address.city ?? '' }}<br>
+        {{ address.country ?? '' }}
+    </p>
+{% endif %}
+{{ include('email/_items.html.twig') }}
+<p><a href="{{ url('admin') }}">Voir dans l'administration</a></p>

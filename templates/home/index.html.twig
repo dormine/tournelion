@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="hero">
+        <h1>Tournelion</h1>
+        <p>Artiste · Autrice</p>
+    </section>
+
+    {% if products is not empty %}
+        <h2>Dernières créations</h2>
+        <div class="product-grid">
+            {% for product in products %}
+                {{ include('shop/_card.html.twig') }}
+            {% endfor %}
+        </div>
+        <p><a class="button" href="{{ path('shop_index') }}">Voir toute la boutique</a></p>
+    {% endif %}
+{% endblock %}

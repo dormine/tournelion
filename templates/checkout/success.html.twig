@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Merci !{% endblock %}
+
+{% block body %}
+    <h1>Merci pour votre commande !</h1>
+    <p>Votre commande <strong>{{ order.reference }}</strong> a bien été transmise.</p>
+    <p>Vous allez recevoir un e-mail de confirmation dès que le paiement sera validé.</p>
+    <p><a class="button" href="{{ path('home') }}">Retour à l'accueil</a></p>
+{% endblock %}

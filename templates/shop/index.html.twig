@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique{% endblock %}
+
+{% block body %}
+    <h1>Boutique</h1>
+    <div class="product-grid">
+        {% for product in products %}
+            {{ include('shop/_card.html.twig') }}
+        {% else %}
+            <p>Aucun produit pour le moment, revenez bientôt !</p>
+        {% endfor %}
+    </div>
+{% endblock %}

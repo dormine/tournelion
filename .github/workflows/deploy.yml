@@ -1,0 +1,60 @@
+name: Déploiement OVH
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency: deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, pdo_mysql
+
+      - name: Dépendances (sans les outils de dev)
+        run: composer install --no-dev --optimize-autoloader --classmap-authoritative --no-interaction --no-progress
+
+      - name: Compilation des assets
+        run: php bin/console asset-map:compile
+
+      - name: Envoi FTP (FTPS) et vidage du cache
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          sudo apt-get install -y -qq lftp
+          # --delete supprime sur le serveur les fichiers supprimés du dépôt.
+          # Sont exclus : la config du serveur (.env.local), le cache/logs (var/)
+          # et les images envoyées depuis l'admin (public/uploads/).
+          lftp -u "$FTP_USER,$FTP_PASSWORD" "$FTP_HOST" <<EOF
+          set ftp:ssl-force true
+          mirror --reverse --delete --parallel=8 --verbose=1 \
+            --exclude-glob .git/ \
+            --exclude-glob .github/ \
+            --exclude-glob docker/ \
+            --exclude-glob deploy/ \
+            --exclude-glob tests/ \
+            --exclude-glob var/ \
+            --exclude-glob public/uploads/ \
+            --exclude-glob .env.local \
+            --exclude-glob compose.yaml \
+            ./ www/
+          rm -r -f www/var/cache/prod
+          bye
+          EOF
+
+      - name: Migrations de la base de données
+        run: |
+          curl --fail-with-body -sS -X POST \
+            -H "X-Deploy-Token: ${{ secrets.DEPLOY_TOKEN }}" \
+            "${{ secrets.SITE_URL }}/_deploy/migrate"
