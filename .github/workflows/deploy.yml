@@ -26,7 +26,7 @@ jobs:
       - name: Compilation des assets
         run: php bin/console asset-map:compile
 
-      - name: Envoi FTP (FTPS) et vidage du cache
+      - name: Envoi FTP et vidage du cache
         env:
           FTP_HOST: ftp.cluster100.hosting.ovh.net
           FTP_USER: ${{ secrets.FTP_USER }}
@@ -37,7 +37,9 @@ jobs:
           # Sont exclus : la config du serveur (.env.local), le cache/logs (var/)
           # et les images envoyées depuis l'admin (public/uploads/).
           lftp -u "$FTP_USER,$FTP_PASSWORD" "$FTP_HOST" <<EOF
-          set ftp:ssl-force true
+          # L'offre OVH Perso ne propose ni FTPS (AUTH TLS refusé) ni SFTP : connexion FTP en clair.
+          # TODO avant l'ouverture de la boutique : passer à l'offre Pro et déployer en SFTP.
+          set ftp:ssl-allow false
           mirror --reverse --delete --parallel=8 --verbose=1 \
             --exclude-glob .git/ \
             --exclude-glob .github/ \

@@ -82,7 +82,7 @@ Dépôt → *Settings → Secrets and variables → Actions* → ajouter :
 Le serveur FTP (`ftp.cluster100.hosting.ovh.net`) est écrit directement dans le workflow.
 
 Chaque push sur `main` lance `.github/workflows/deploy.yml` : `composer install`, compilation des assets,
-envoi FTP, vidage du cache, puis appel de `/_deploy/migrate` qui joue les migrations (pas de SSH sur l'offre Perso).
+envoi FTP (en clair : l'offre Perso ne propose ni FTPS ni SFTP), vidage du cache, puis appel de `/_deploy/migrate` qui joue les migrations (pas de SSH sur l'offre Perso).
 Le dossier `public/uploads/` (images envoyées depuis l'admin) n'est jamais écrasé par le déploiement.
 
 ### 3. Stripe
